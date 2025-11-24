@@ -1,30 +1,40 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import TaskList from './TaskList';
 import TaskInput from './TaskInput';
 
 export default function App() {
-  // ---------------------------
-  //  Task State lives in App
-  // ---------------------------
-  const [tasks, setTasks] = useState([
-    { id: 1, name: 'Buy groceries', completed: false },
-    { id: 2, name: 'Finish project', completed: false },
-    { id: 3, name: 'Go for a run', completed: true },
-  ]);
+  const [tasks, setTasks] = useState([]);
+
+  // Fetch tasks from backend
+  useEffect(() => {
+    fetch('http://127.0.0.1:8000/tasks')
+      .then((res) => res.json())
+      .then(setTasks)
+      .catch(console.error);
+  }, []);
 
   // Add a new task
   const handleAddTask = (name) => {
-    const newTask = {
-      id: Date.now(),
-      name,
-      completed: false,
-    };
-    setTasks((prev) => [...prev, newTask]);
+    fetch('http://127.0.0.1:8000/tasks', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name }),
+    })
+      .then((res) => res.json())
+      .then((newTask) => setTasks((prev) => [...prev, newTask]))
+      .catch(console.error);
   };
 
-  // Toggle task status
+  // Toggle a task
   const handleToggle = (id) => {
-    setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t)));
+    fetch(`http://127.0.0.1:8000/tasks/${id}/toggle`, {
+      method: 'PATCH',
+    })
+      .then((res) => res.json())
+      .then((updatedTask) =>
+        setTasks((prev) => prev.map((t) => (t.id === updatedTask.id ? updatedTask : t)))
+      )
+      .catch(console.error);
   };
 
   return (
@@ -36,13 +46,9 @@ export default function App() {
 
       <div className="max-w-3xl mx-auto mt-16 p-6 bg-tachi-panel rounded-tachi shadow-tachi-panel border border-tachi-line relative">
         <div className="absolute -top-6 -right-6 w-20 h-20 border-2 border-tachi-teal rounded-full animate-pulse-glow"></div>
-
         <h1 className="text-3xl font-semibold mb-8 text-tachi-cyan">Task Console</h1>
 
-        {/* Task Input */}
         <TaskInput onAddTask={handleAddTask} />
-
-        {/* Task List */}
         <TaskList tasks={tasks} onToggle={handleToggle} />
       </div>
     </div>
