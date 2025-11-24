@@ -14,10 +14,11 @@ def init_db():
     c.execute("PRAGMA journal_mode=WAL;")
     c.execute("""
         CREATE TABLE IF NOT EXISTS tasks (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            title TEXT NOT NULL,
-            done BOOLEAN NOT NULL DEFAULT 0
-        )
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        completed BOOLEAN NOT NULL DEFAULT 0
+)
+
     """)
     conn.commit()
     conn.close()

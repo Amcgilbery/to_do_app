@@ -1,8 +1,8 @@
 from pydantic import BaseModel
 
 class TaskCreate(BaseModel):
-    title: str
+    name: str
 
 class Task(TaskCreate):
     id: int
-    done: bool
+    completed: bool
