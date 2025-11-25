@@ -12,7 +12,7 @@ function TaskInput({ onAddTask }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-3 mb-6">
+    <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 mb-6">
       <input
         type="text"
         value={taskName}
@@ -22,7 +22,7 @@ function TaskInput({ onAddTask }) {
       />
       <button
         type="submit"
-        className="bg-tachi-teal text-black px-4 py-2 rounded-tachi shadow-tachi-soft hover:bg-tachi-signal transition"
+        className="mt-3 sm:mt-0 sm:ml-3 bg-tachi-teal text-black px-4 py-2 rounded-tachi shadow-tachi-soft hover:bg-tachi-signal transition"
       >
         Add
       </button>
