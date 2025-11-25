@@ -1,4 +1,4 @@
-function TaskItem({ task, onToggle }) {
+function TaskItem({ task, onToggle, onDelete }) {
   return (
     <div
       onClick={() => onToggle(task.id)}
@@ -43,6 +43,35 @@ function TaskItem({ task, onToggle }) {
         >
           {task.completed ? 'Completed' : 'Pending'}
         </span>
+
+        {/* Delete Button */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation(); // Prevent triggering onToggle when clicking delete
+            console.log('Delete clicked for task ID:', task.id);
+            onDelete(task.id);
+          }}
+          className="
+          text-sm
+         text-tachi-red
+         hover:text-white
+         hover:bg-tachi-red
+         bg-tachi-ink
+         rounded-full
+         px-3 py-1
+         transition
+         duration-300
+         ease-in-out
+         shadow-tachi-soft
+         group
+         flex items-center justify-center
+         focus:outline-none
+         focus:ring-2
+         focus:ring-tachi-cyan
+         focus:ring-offset-2"
+        >
+          <span className="group-hover:animate-pulse-glow">Delete</span>
+        </button>
       </div>
     </div>
   );

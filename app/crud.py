@@ -3,11 +3,11 @@ from .database import get_connection
 def create_task(task):
     conn = get_connection()
     cur = conn.cursor()
-    cur.execute("INSERT INTO tasks (title) VALUES (?)", (task.title,))
+    cur.execute("INSERT INTO tasks (name) VALUES (?)", (task.name,))
     conn.commit()
     task_id = cur.lastrowid
     conn.close()
-    return {"id": task_id, "title": task.title, "done": False}
+    return {"id": task_id, "name": task.name, "completed": False}
 
 def get_tasks():
     conn = get_connection()
@@ -23,3 +23,22 @@ def delete_task(task_id):
     cur.execute("DELETE FROM tasks WHERE id = ?", (task_id,))
     conn.commit()
     conn.close()
+
+def toggle_task(task_id: int):
+    conn = get_connection()
+    cur = conn.cursor()
+
+    # Flip the completed field (0 -> 1, 1 -> 0)
+    cur.execute("""
+        UPDATE tasks
+        SET completed = NOT completed
+        WHERE id = ?
+    """, (task_id,))
+
+    conn.commit()
+
+    # Return the updated task
+    cur.execute("SELECT * FROM tasks WHERE id = ?", (task_id,))
+    row = cur.fetchone()
+    conn.close()
+    return dict(row) if row else None
