@@ -37,6 +37,18 @@ export default function App() {
       .catch(console.error);
   };
 
+  // Delete a task
+  const handleDelete = (id) => {
+    fetch(`http://127.0.0.1:8000/tasks/${id}`, {
+      method: 'DELETE',
+    })
+      .then(() => {
+        // Remove the deleted task from the UI
+        setTasks((prev) => prev.filter((task) => task.id !== id));
+      })
+      .catch(console.error);
+  };
+
   return (
     <div className="min-h-screen bg-tachi-ink relative overflow-hidden text-tachi-cyan p-6 flex items-center justify-center">
       <div className="absolute inset-0 scanlines pointer-events-none opacity-10"></div>
@@ -49,7 +61,7 @@ export default function App() {
         <h1 className="text-3xl font-semibold mb-8 text-tachi-cyan">Task Console</h1>
 
         <TaskInput onAddTask={handleAddTask} />
-        <TaskList tasks={tasks} onToggle={handleToggle} />
+        <TaskList tasks={tasks} onToggle={handleToggle} onDelete={handleDelete} />
       </div>
     </div>
   );

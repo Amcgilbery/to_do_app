@@ -1,4 +1,4 @@
-function TaskItem({ task, onToggle }) {
+function TaskItem({ task, onToggle, onDelete }) {
   return (
     <div
       onClick={() => onToggle(task.id)}
@@ -43,6 +43,18 @@ function TaskItem({ task, onToggle }) {
         >
           {task.completed ? 'Completed' : 'Pending'}
         </span>
+
+        {/* Delete Button */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation(); // Prevent triggering onToggle when clicking delete
+            console.log('Delete clicked for task ID:', task.id);
+            onDelete(task.id);
+          }}
+          className="text-sm text-tachi-red hover:text-tachi-cyan transition"
+        >
+          Delete
+        </button>
       </div>
     </div>
   );
