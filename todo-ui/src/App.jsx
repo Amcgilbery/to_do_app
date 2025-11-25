@@ -56,9 +56,11 @@ export default function App() {
         <div className="w-1/4 h-full bg-tachi-cyan animate-hud-bar"></div>
       </div>
 
-      <div className="max-w-3xl mx-auto mt-16 p-6 bg-tachi-panel rounded-tachi shadow-tachi-panel border border-tachi-line relative">
+      <div className="max-w-3xl mx-auto mt-8 sm:mt-16 p-6 bg-tachi-panel rounded-tachi shadow-tachi-panel border border-tachi-line relative w-full sm:w-auto">
         <div className="absolute -top-6 -right-6 w-20 h-20 border-2 border-tachi-teal rounded-full animate-pulse-glow"></div>
-        <h1 className="text-3xl font-semibold mb-8 text-tachi-cyan">Task Console</h1>
+        <h1 className="text-3xl font-semibold mb-8 text-tachi-cyan text-center sm:text-left">
+          Task Console
+        </h1>
 
         <TaskInput onAddTask={handleAddTask} />
         <TaskList tasks={tasks} onToggle={handleToggle} onDelete={handleDelete} />
