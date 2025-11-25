@@ -22,6 +22,9 @@ export default {
           // lines
           line: '#0d1014',
           grayline: '#30363f',
+
+          // delete button red
+          red: '#ff0000',
         },
       },
 

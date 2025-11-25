@@ -51,9 +51,26 @@ function TaskItem({ task, onToggle, onDelete }) {
             console.log('Delete clicked for task ID:', task.id);
             onDelete(task.id);
           }}
-          className="text-sm text-tachi-red hover:text-tachi-cyan transition"
+          className="
+          text-sm
+         text-tachi-red
+         hover:text-white
+         hover:bg-tachi-red
+         bg-tachi-ink
+         rounded-full
+         px-3 py-1
+         transition
+         duration-300
+         ease-in-out
+         shadow-tachi-soft
+         group
+         flex items-center justify-center
+         focus:outline-none
+         focus:ring-2
+         focus:ring-tachi-cyan
+         focus:ring-offset-2"
         >
-          Delete
+          <span className="group-hover:animate-pulse-glow">Delete</span>
         </button>
       </div>
     </div>
