@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-backend
+  namespace: todo-app
+spec:
+  replicas: 1 # You can scale as needed, but for a small setup, 1 replica is fine
+  selector:
+    matchLabels:
+      app: todo-backend
+  template:
+    metadata:
+      labels:
+        app: todo-backend
+    spec:
+      containers:
+        - name: todo-backend
+          image: ghcr.io/amcgilbery/todo_backend:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DATABASE_URL
+              value: 'sqlite:///todo.db' # SQLite path inside the container
+          volumeMounts:
+            - name: sqlite-volume
+              mountPath: /app/todo.db # Mount the SQLite DB to this path in the container
+      volumes:
+        - name: sqlite-volume
+          persistentVolumeClaim:
+            claimName: todo-sqlite-pvc # Link to the PVC defined below
+      nodeSelector:
+        # Optional: use nodeSelector if you need to restrict pods to a certain node
+        kubernetes.io/hostname: kubernetes2 # Use the node name or label if needed
+      imagePullSecrets:
+        - name: ghcr-secret
+
+      affinity: # Optional: more granular node scheduling
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values:
+                      - kubernetes2 # Ensure the pod is scheduled on the node with the PVC
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: todo-backend
+  namespace: todo-app
+spec:
+  selector:
+    app: todo-backend
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+  type: LoadBalancer # MetalLB will assign an external IP

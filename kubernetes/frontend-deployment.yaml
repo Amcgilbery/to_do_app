@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-frontend
+  namespace: todo-app
+spec:
+  replicas: 1 # Again, this can be scaled if needed
+  selector:
+    matchLabels:
+      app: todo-frontend
+  template:
+    metadata:
+      labels:
+        app: todo-frontend
+    spec:
+      containers:
+        - name: todo-frontend
+          image: ghcr.io/amcgilbery/todo_frontend:latest # Replace with your actual frontend image
+          ports:
+            - containerPort: 3000
+          env:
+            - name: VITE_API_URL
+              value: 'http://10.69.0.53:8000' # Connect to the backend service
+      imagePullSecrets:
+        - name: ghcr-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: todo-frontend
+  namespace: todo-app
+spec:
+  selector:
+    app: todo-frontend
+  ports:
+    - protocol: TCP
+      port: 80 # Expose the frontend app on port 80 externally
+      targetPort: 3000
+  type: LoadBalancer # MetalLB will assign an external IP
