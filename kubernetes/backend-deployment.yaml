@@ -1,20 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: todo_backend
+  name: todo-backend
+  namespace: todo-app
 spec:
   replicas: 1 # You can scale as needed, but for a small setup, 1 replica is fine
   selector:
     matchLabels:
-      app: todo_backend
+      app: todo-backend
   template:
     metadata:
       labels:
-        app: todo_backend
+        app: todo-backend
     spec:
       containers:
-        - name: todo_backend
-          image: todo_backend:latest
+        - name: todo-backend
+          image: ghcr.io/amcgilbery/todo_backend:latest
           ports:
             - containerPort: 8000
           env:
@@ -26,10 +27,12 @@ spec:
       volumes:
         - name: sqlite-volume
           persistentVolumeClaim:
-            claimName: sqlite-pvc # Link to the PVC defined below
+            claimName: todo-sqlite-pvc # Link to the PVC defined below
       nodeSelector:
         # Optional: use nodeSelector if you need to restrict pods to a certain node
         kubernetes.io/hostname: kubernetes2 # Use the node name or label if needed
+      imagePullSecrets:
+        - name: ghcr-secret
 
       affinity: # Optional: more granular node scheduling
         nodeAffinity:
@@ -45,10 +48,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: todo_backend
+  name: todo-backend
+  namespace: todo-app
 spec:
   selector:
-    app: todo_backend
+    app: todo-backend
   ports:
     - protocol: TCP
       port: 8000

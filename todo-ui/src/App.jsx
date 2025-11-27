@@ -7,7 +7,7 @@ export default function App() {
 
   // Fetch tasks from backend
   useEffect(() => {
-    fetch('http://127.0.0.1:8000/tasks')
+    fetch('http://<kubernetes svc IP or localhost>:8000/tasks')
       .then((res) => res.json())
       .then(setTasks)
       .catch(console.error);
@@ -15,7 +15,7 @@ export default function App() {
 
   // Add a new task
   const handleAddTask = (name) => {
-    fetch('http://127.0.0.1:8000/tasks', {
+    fetch('http://<kubernetes svc IP or localhost>:8000/tasks', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name }),
@@ -27,7 +27,7 @@ export default function App() {
 
   // Toggle a task
   const handleToggle = (id) => {
-    fetch(`http://127.0.0.1:8000/tasks/${id}/toggle`, {
+    fetch(`http://<kubernetes svc IP or localhost>/tasks/${id}/toggle`, {
       method: 'PATCH',
     })
       .then((res) => res.json())
@@ -39,7 +39,7 @@ export default function App() {
 
   // Delete a task
   const handleDelete = (id) => {
-    fetch(`http://127.0.0.1:8000/tasks/${id}`, {
+    fetch(`http://<kubernetes svc IP or localhost>/tasks/${id}`, {
       method: 'DELETE',
     })
       .then(() => {
