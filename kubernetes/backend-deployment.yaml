@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend
+  name: todo_backend
 spec:
   replicas: 1 # You can scale as needed, but for a small setup, 1 replica is fine
   selector:
     matchLabels:
-      app: backend
+      app: todo_backend
   template:
     metadata:
       labels:
-        app: backend
+        app: todo_backend
     spec:
       containers:
-        - name: backend
-          image: backend-image:latest # Replace with your actual backend image
+        - name: todo_backend
+          image: todo_backend:latest
           ports:
             - containerPort: 8000
           env:
@@ -45,10 +45,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: backend
+  name: todo_backend
 spec:
   selector:
-    app: backend
+    app: todo_backend
   ports:
     - protocol: TCP
       port: 8000
